@@ -13,11 +13,18 @@ return new class extends Migration
     {
         Schema::create('alumnos', function (Blueprint $table) {
             $table->id();
+
             $table->string('nombre', 50);
+
             $table->string('apellido', 50);
-            $table->string('cedula', 50);
+
+            $table->string('cedula', 50)
+            ->unique();
+
             $table->date('nacimiento');
+
             $table->tinyInteger('edad');
+            
             $table->timestamps();
         });
     }

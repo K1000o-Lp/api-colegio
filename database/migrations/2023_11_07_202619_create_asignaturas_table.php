@@ -13,9 +13,14 @@ return new class extends Migration
     {
         Schema::create('asignaturas', function (Blueprint $table) {
             $table->id();
+
             $table->string('nombre', 50);
-            $table->text('descripcion')->nullable();
+
+            $table->text('descripcion')
+            ->nullable();
+
             $table->timestamps();
+
         });
     }
 
