@@ -13,4 +13,14 @@ class Asignatura extends Model
       'nombre',
       'descripcion',
     ];
+
+    // Relaciones
+
+    public function profesores() {
+      return $this->hasMany(Profesor::class);
+    }
+
+    public function alumnos() {
+      return $this->belongsToMany(Alumno::class, 'calificacions');
+    }
 }

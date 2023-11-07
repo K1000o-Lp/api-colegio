@@ -16,4 +16,8 @@ class Alumno extends Model
       'nacimiento',
       'edad',
     ];
+
+    public function asignaturas() {
+      return $this->belongsToMany(Asignatura::class, 'calificacions');
+    }
 }
