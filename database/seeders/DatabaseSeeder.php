@@ -3,6 +3,11 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+
+use App\Models\Alumno;
+use App\Models\Asignatura;
+use App\Models\Profesor;
+use App\Models\Calificacion;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -18,5 +23,10 @@ class DatabaseSeeder extends Seeder
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
         // ]);
+
+        Alumno::factory(50)->create();
+        Asignatura::factory(50)->create();
+        Profesor::factory(50)->create();
+        Calificacion::factory(50)->create();
     }
 }
