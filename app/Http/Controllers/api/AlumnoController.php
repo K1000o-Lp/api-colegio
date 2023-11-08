@@ -4,16 +4,16 @@ namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Alumno;
-use App\Http\Requests\StoreAlumnoRequest;
-use App\Http\Requests\UpdateAlumnoRequest;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class AlumnoController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
+
     public function index()
     {
       $alumnos = Alumno::all([
@@ -31,16 +31,24 @@ class AlumnoController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreAlumnoRequest $request)
+    public function store(Request $request)
     {
-      $alumno = Alumno::create([
-        'nombre' => $request->nombre,
-        'apellido' => $request->apellido,
-        'cedula' => $request->cedula,
-        'nacimiento' => $request->nacimiento,
-        'edad' => $request->edad,
+      $input = $request->all();
+
+      $validator = Validator::make($input, [
+        'nombre' => 'required|max:50',
+        'apellido' => 'required|max:50',
+        'cedula' => 'required|unique:alumnos|max_digits:10|numeric',
+        'nacimiento' => 'required|date',
+        'edad' => 'required|numeric',
       ]);
-      
+
+      if($validator->fails()){
+          return response()->json($validator->errors(), 400);
+      }
+
+      $alumno = Alumno::create($input);
+
       return response()->json($alumno, 201);
     }
 
@@ -55,7 +63,7 @@ class AlumnoController extends Controller
       } 
       catch(ModelNotFoundException $error) 
       {
-        return response()->json(['error' => $error], 404);
+        return response()->json(['error' => 'Alumno no existe o fue eliminado'], 404);
       }
 
       return response()->json($alumno, 200);
@@ -64,7 +72,7 @@ class AlumnoController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateAlumnoRequest $request, string $id)
+    public function update(Request $request, string $id)
     {
       try
       {
@@ -72,7 +80,21 @@ class AlumnoController extends Controller
       }
       catch(ModelNotFoundException $error)
       {
-        return response()->json(['error' => $error], 404);
+        return response()->json(['error' => 'Alumno no existe o fue eliminado.'], 404);
+      }
+
+      $input = $request->all();
+
+      $validator = Validator::make($input, [
+        'nombre' => 'required|max:50',
+        'apellido' => 'required|max:50',
+        'cedula' => 'required|max_digits:10|numeric',
+        'nacimiento' => 'required|date',
+        'edad' => 'required|numeric',
+      ]);
+
+      if($validator->fails()){
+          return response()->json($validator->errors(), 400);
       }
 
       $alumno->nombre = $request->nombre;
@@ -96,7 +118,7 @@ class AlumnoController extends Controller
       }
       catch(ModelNotFoundException $error)
       {
-        return response()->json(['error' => $error], 404);
+        return response()->json(['error' => 'Alumno no existe'], 404);
       }
 
       $alumno->delete();

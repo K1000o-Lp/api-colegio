@@ -7,11 +7,19 @@ use Illuminate\Database\Eloquent\Model;
 
 class Calificacion extends Model
 {
-    use HasFactory;
+  use HasFactory;
 
-    protected $fillabel = [
-      'alumno',
-      'asignatura_id',
-      'calificacion_id',
-    ];
+  protected $fillable = [
+    'alumno_id',
+    'asignatura_id',
+    'calificacion',
+  ];
+
+  public function alumnos() {
+    return $this->belongsTo(Alumno::class, 'alumno_id');
+  }
+
+  public function asignaturas() {
+    return $this->belongsTo(Asignatura::class, 'asignatura_id');
+  }
 }

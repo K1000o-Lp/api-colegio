@@ -19,6 +19,6 @@ class Profesor extends Model
     // Relaciones
 
     public function asignaturas() {
-      return $this->belongsTo(Asignatura::class);
+      return $this->belongsTo(Asignatura::class, 'asignatura_id');
     }
 }
